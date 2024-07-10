@@ -1,0 +1,140 @@
+/* General styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Container styling */
+.container {
+  background: #fbfafa;
+  padding: 20px 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Heading */
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* File input */
+.input-file {
+  display: block;
+  margin: 10px auto 20px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Upload button */
+.btn-upload {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.btn-upload:hover {
+  background-color: #45a049;
+}
+
+/* Progress bar container */
+.progress-container {
+  width: 100%;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+.progress-bar {
+  height: 24px;
+  width: 0;
+  background-color: #4caf50;
+  border-radius: 5px;
+  text-align: center;
+  color: white;
+}
+
+/* Upload status */
+.upload-status {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #333;
+}
+
+#login-div {
+  background-color: #f11414;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  text-align: center;
+}
+h1 {
+  color: #333333;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+button:hover {
+  background-color: #45a049;
+}
+
+/* Add styles for the modal */
+.modal {
+display: none; /* Hide the modal by default */
+position: fixed;
+z-index: 1;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: auto;
+background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+background-color: #f0f0f0;
+margin: 15% auto;
+padding: 20px;
+border: 1px solid #888;
+width: 80%;
+}
+
+.modal-content h2 {
+margin-top: 0;
+}
+
+#signup-modal {
+display: none; 
+}

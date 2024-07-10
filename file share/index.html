@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Firebase Integration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <link rel="stylesheet" type="text/css" href="hello.css" />
+  <style>
+    /* Your existing CSS styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      display: none; /* Initially hide the container */
+    }
+  </style>
+</head>
+<body>
+  <div id="login-div">
+    <h1>Login</h1>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+    <button id="login-btn">Login</button>
+  </div>
+
+  <div class="container">
+    <h1>Share Files</h1>
+    <input type="file" id="files" class="input-file" multiple />
+    <button id="send" class="btn-upload">Upload</button>
+    <div id="uploading" class="upload-status"></div>
+    <div class="progress-container">
+      <div id="progress" class="progress-bar"></div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs and Script Imports -->
+  <script type="module">
+    // Firebase imports for both authentication and storage
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getStorage, ref, uploadBytesResumable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getDatabase, ref as databaseRef, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      // Your Firebase config details
+
+      apiKey: "AIzaSyAM2aY3x89NWI30k1Xtiq9kQDx9IQZlxEc",
+    authDomain: "first-firebase-4f8ca.firebaseapp.com",
+    projectId: "first-firebase-4f8ca",
+    storageBucket: "first-firebase-4f8ca.appspot.com",
+    messagingSenderId: "873463371740",
+    appId: "1:873463371740:web:b3c1aa79b55a199fd02119"
+
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    // DOMContentLoaded event listener to ensure DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // Login button click event
+      document.getElementById('login-btn').addEventListener('click', async () => {
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+          // Firebase authentication and database operations
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          const user = userCredential.user;
+          await updateProfile(user, { displayName: username });
+          await set(databaseRef(database, 'users/' + user.uid), { username: username, email: email });
+
+          console.log('User profile updated with username and data saved to database');
+          alert('User logged in successfully!');
+
+          // Toggle visibility of sections
+          document.getElementById('login-div').style.display = 'none';
+          document.querySelector('.container').style.display = 'block';
+
+        } catch (error) {
+          console.error('Error signing up:', error);
+          alert('Error signing up: ' + error.message);
+        }
+      });
+
+      // File upload functionality
+      let files = [];
+      document.getElementById("files").addEventListener("change", function(e) {
+        files = e.target.files;
+        for (let i = 0; i < files.length; i++) {
+          console.log(files[i]);
+        }
+      });
+
+      document.getElementById("send").addEventListener("click", function() {
+        if (files.length != 0) {
+          for (let i = 0; i < files.length; i++) {
+            const storageRef = ref(storage, files[i].name);
+            const uploadTask = uploadBytesResumable(storageRef, files[i]);
+
+            uploadTask.on(
+              "state_changed",
+              (snapshot) => {
+                const percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                document.getElementById("progress").style.width = percentage + '%';
+                document.getElementById("progress").textContent = Math.round(percentage) + '%';
+              },
+              (error) => {
+                console.error("Error uploading file:", error);
+                alert("Error uploading file: " + error.message);
+              },
+              () => {
+                uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                  document.getElementById("uploading").innerHTML += `${files[i].name} uploaded. <a href="${downloadURL}" target="_blank">View</a><br />`;
+                });
+              }
+            );
+          }
+        } else {
+          alert("No file chosen");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
